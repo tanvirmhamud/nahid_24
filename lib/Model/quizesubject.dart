@@ -1,53 +1,61 @@
 // To parse this JSON data, do
 //
-//     final examSubject = examSubjectFromJson(jsonString);
+//     final quizesubject = quizesubjectFromJson(jsonString);
 
 import 'dart:convert';
 
-ExamSubject examSubjectFromJson(String str) => ExamSubject.fromJson(json.decode(str));
+List<Quizesubject> quizesubjectFromJson(String str) => List<Quizesubject>.from(json.decode(str).map((x) => Quizesubject.fromJson(x)));
 
-String examSubjectToJson(ExamSubject data) => json.encode(data.toJson());
+String quizesubjectToJson(List<Quizesubject> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class ExamSubject {
-    ExamSubject({
-        this.error,
-        this.data,
+class Quizesubject {
+    Quizesubject({
+        this.title,
+        this.subjects,
     });
 
-    bool? error;
-    List<Datum> ?data;
+    String? title;
+    List<Subject>? subjects;
 
-    factory ExamSubject.fromJson(Map<String, dynamic> json) => ExamSubject(
-        error: json["error"],
-        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+    factory Quizesubject.fromJson(Map<String, dynamic> json) => Quizesubject(
+        title: json["title"],
+        subjects: List<Subject>.from(json["subjects"].map((x) => Subject.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
-        "error": error,
-        "data": List<dynamic>.from(data!.map((x) => x.toJson())),
+        "title": title,
+        "subjects": List<dynamic>.from(subjects!.map((x) => x.toJson())),
     };
 }
 
-class Datum {
-    Datum({
+class Subject {
+    Subject({
         this.id,
-        this.subjectName,
-      
+        this.quizSubjectId,
+        this.topicName,
+        this.createdAt,
+        this.updatedAt,
     });
 
     int? id;
-    String? subjectName;
-   
+    String? quizSubjectId;
+    String? topicName;
+    DateTime? createdAt;
+    DateTime? updatedAt;
 
-    factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+    factory Subject.fromJson(Map<String, dynamic> json) => Subject(
         id: json["id"],
-        subjectName: json["subject_name"],
-      
+        quizSubjectId: json["quiz_subject_id"],
+        topicName: json["topic_name"],
+        createdAt: DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
     );
 
     Map<String, dynamic> toJson() => {
         "id": id,
-        "subject_name": subjectName,
-      
+        "quiz_subject_id": quizSubjectId,
+        "topic_name": topicName,
+        "created_at": createdAt!.toIso8601String(),
+        "updated_at": updatedAt == null ? null : updatedAt!.toIso8601String(),
     };
 }

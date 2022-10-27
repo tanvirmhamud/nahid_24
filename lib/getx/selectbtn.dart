@@ -1,8 +1,10 @@
 import 'package:get/get.dart';
 
+import '../Model/Product/product_list.dart';
+import '../Model/product_model.dart';
 import '../Model/quize2submit.dart';
 import '../Model/submitmodel.dart';
-import '../domain/app/shop/product_model.dart';
+
 
 class Btncontroller extends GetxController {
   var select2ndbtn = 0.obs;
@@ -105,9 +107,9 @@ class Btncontroller extends GetxController {
 
   // product
 
-  var productmodel = <ProductModel>[].obs;
+  var productmodel = <ProductDatum>[].obs;
 
-  void addproduct(ProductModel product) {
+  void addproduct(ProductDatum product) {
     if (productmodel.contains(product)) {
       print("product already added");
     } else {

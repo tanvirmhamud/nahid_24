@@ -23,38 +23,7 @@ class _MyLiveClassPageState extends State<MyLiveClassPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            FutureBuilder<dynamic>(
-                future: HttpSlider().getslider(),
-                builder: ((context, snapshot) {
-                  if (snapshot.hasData) {
-                    print(snapshot.data);
-                    return Container(
-                      color: Colors.white,
-                      width: double.infinity,
-                      height: 120,
-                      child: CarouselSlider(
-                          options: CarouselOptions(
-                              autoPlayInterval: Duration(seconds: 10),
-                              viewportFraction: 1.0,
-                              enableInfiniteScroll: false,
-                              initialPage: 0,
-                              aspectRatio: 0.0,
-                              autoPlay: true,
-                              enlargeCenterPage: true,
-                              height: 120),
-                          items: List<Widget>.generate(
-                              snapshot.data['data'].length,
-                              (index) => Image.network(
-                                    snapshot.data['data'][index]['img'],
-                                    fit: BoxFit.cover,
-                                  ))),
-                    );
-                  } else {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                })),
+            
             ListView.builder(
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,

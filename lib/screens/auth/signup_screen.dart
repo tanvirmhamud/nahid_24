@@ -6,7 +6,7 @@ import 'package:nahid_24/utils/constants/themes.dart';
 import 'package:nahid_24/utils/widget/custom_text_button.dart';
 import 'package:nahid_24/utils/widget/submit_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+import '../../Helper/toast.dart';
 import '../../Http/Login/login.dart';
 import '../../utils/constants/colors.dart';
 import '../../utils/widget/custom_textfield.dart';
@@ -28,18 +28,36 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool loading = false;
 
   Future registation() async {
-    setState(() {
-      loading = true;
-    });
-    await HttpLogin().registation(
-        context: context,
-        email: emailController.text,
-        name: usernameController.text,
-        number: numberController.text,
-        password: passwordController.text);
-    setState(() {
-      loading = false;
-    });
+    if (usernameController.text.isEmpty) {
+      error("Enter your name");
+    } else if (emailController.text.isEmpty) {
+      error("Enter your email");
+    } else if (numberController.text.isEmpty) {
+      error("Enter your number");
+    } else if (!RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(emailController.text)) {
+      error("Invalid email");
+    } else if (numberController.text.length < 11) {
+      error("Enter 11 digit number");
+    } else if (passwordController.text.isEmpty) {
+      error("Enter password");
+    } else if (passwordController.text.length < 6) {
+      error("Enter minimum 6 character password");
+    } else {
+      setState(() {
+        loading = true;
+      });
+      await HttpLogin().registation(
+          context: context,
+          email: emailController.text,
+          name: usernameController.text,
+          number: numberController.text,
+          password: passwordController.text);
+      setState(() {
+        loading = false;
+      });
+    }
   }
 
   @override
@@ -155,25 +173,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               width: 100,
                               height: 30,
                               onTap: () {
-                                if (passwordController.text.length < 8) {
-                                  Fluttertoast.showToast(
-                                      msg:
-                                          "Enter minimum 8 characters password",
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      gravity: ToastGravity.BOTTOM,
-                                      timeInSecForIosWeb: 1,
-                                      backgroundColor: Colors.red,
-                                      textColor: Colors.white,
-                                      fontSize: 16.0);
-                                } else {
-                                  registation();
-                                  // ref.read(authProvider.notifier).singUp(
-                                  //     SignUpBody(
-                                  //         name: usernameController.text,
-                                  //         email: emailController.text,
-                                  //         password: passwordController.text,
-                                  //         number: numberController.text));
-                                }
+                                registation();
+                                // ref.read(authProvider.notifier).singUp(
+                                //     SignUpBody(
+                                //         name: usernameController.text,
+                                //         email: emailController.text,
+                                //         password: passwordController.text,
+                                //         number: numberController.text));
                               },
                               title: "Sign up",
                               color: PColor.submitButtonColorBlue),

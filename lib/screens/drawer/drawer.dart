@@ -1,28 +1,24 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:nahid_24/screens/auth/login_screen.dart';
 import 'package:nahid_24/utils/constants/assets.dart';
-import 'package:nahid_24/utils/function/navigation.dart';
 import 'package:flutter/material.dart';
-
 import '../../New_Design/Exam/quizesubject.dart';
+import '../../New_Design/Homepage_design/Free_course/free_course.dart';
+import '../../New_Design/Homepage_design/Live_Class/live_class.dart';
+import '../../New_Design/Homepage_design/Paid_course/paid_course.dart';
 import '../../New_Design/Model/model_subject.dart';
+import '../../New_Design/product/books_screen.dart';
 import '../../getx/selectbtn.dart';
-import '../product/books_screen.dart';
-import 'hscpart.dart';
 
-class CustomDrawer extends ConsumerStatefulWidget {
-  CustomDrawer({
-    Key? key,
-  }) : super(key: key);
+class Customdrawer extends StatefulWidget {
+  const Customdrawer({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _CustomDrawer();
+  State<Customdrawer> createState() => _CustomdrawerState();
 }
 
-class _CustomDrawer extends ConsumerState<CustomDrawer> {
+class _CustomdrawerState extends State<Customdrawer> {
   var box = Hive.box('user');
   final _controller = Get.put(Btncontroller());
 
@@ -212,7 +208,7 @@ class _CustomDrawer extends ConsumerState<CustomDrawer> {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    SizedBox(height:5.0),
+                    SizedBox(height: 5.0),
                     Text(
                       "Add Your College/University :",
                       style: TextStyle(
@@ -221,7 +217,7 @@ class _CustomDrawer extends ConsumerState<CustomDrawer> {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    SizedBox(height:5.0),
+                    SizedBox(height: 5.0),
                     Text(
                       "Prize :",
                       style: TextStyle(
@@ -230,7 +226,7 @@ class _CustomDrawer extends ConsumerState<CustomDrawer> {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    SizedBox(height:5.0),
+                    SizedBox(height: 5.0),
                     Text(
                       "Badge :",
                       style: TextStyle(
@@ -308,18 +304,33 @@ class _CustomDrawer extends ConsumerState<CustomDrawer> {
     ),
     DrawerList(
       image: PAssets.d_play_button,
-      title: "HSC Preparation",
-      screens: HscPart(classname: "HSC_Video_Subject", name: "এইচ এসসি"),
+      title: "ফ্রি কোর্স",
+      screens: Scaffold(
+        appBar: AppBar(
+          title: Text("ফ্রি কোর্স"),
+        ),
+        body: FreeCoursePage(valueHide: false),
+      ),
     ),
     DrawerList(
       image: PAssets.d_play_button,
-      title: "Admission Preparation",
-      screens: HscPart(classname: "Admission_Video", name: "ভর্তি প্রস্তুতি"),
+      title: "পেইড কোর্স",
+      screens:Scaffold(
+        appBar: AppBar(
+          title: Text("পেইড কোর্স"),
+        ),
+        body: PaidCoursePage(valueHide: true),
+      ) ,
     ),
     DrawerList(
       image: PAssets.d_play_button,
-      title: "Jop Preparation",
-      screens: HscPart(classname: "Job_Video_Subject", name: "চাকরি প্রস্তুতি"),
+      title: "লাইভ ক্লাস",
+      screens:Scaffold(
+        appBar: AppBar(
+          title: Text("লাইভ ক্লাস"),
+        ),
+        body: LiveClassspage(valueHide: true),
+      ) ,
     ),
     DrawerList(
       image: PAssets.e_m_q,

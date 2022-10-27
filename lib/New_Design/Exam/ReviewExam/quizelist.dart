@@ -97,7 +97,7 @@ class _ReviewQuizeListPageState extends State<ReviewQuizeListPage> {
             child: Column(
               children: [
                 FutureBuilder<QuizeList?>(
-                    future: HttpQuize().getquizelist(widget.topicid),
+                    future: HttpExam().getquizelist(widget.topicid),
                     builder: ((context, snapshot) {
                       if (snapshot.hasData) {
                         questionlength = snapshot.data!.data!.length;

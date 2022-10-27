@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "683579573637",
+    "project_id": "nahid-13cf5",
+    "storage_bucket": "nahid-13cf5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:683579573637:android:f892750c28adbb5c0330ec",
+        "android_client_info": {
+          "package_name": "com.nahid24.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "683579573637-43ca5prip5kj2jn9dv4jj9n8bu9d7ajs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nahid24.android",
+            "certificate_hash": "befec283337c1df3589a3244e123181084af6b7b"
+          }
+        },
+        {
+          "client_id": "683579573637-efvkpbiiddtk9imntj37hpo19bion6qq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQCfT1QCU2Y2PdFmbPaUlnq4E59DqOa1w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "683579573637-efvkpbiiddtk9imntj37hpo19bion6qq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -7,12 +7,12 @@ import 'package:nahid_24/constant.dart';
 
 import '../../Model/examtopic.dart';
 import '../../Model/quizelist.dart';
-import '../../Model/quizesubject.dart';
+import '../../Model/examsubject.dart';
 import 'package:http/http.dart' as http;
 
 import '../../Model/submitmodel.dart';
 
-class HttpQuize {
+class HttpExam {
   var box = Hive.box('user');
 
   Future<ExamSubject?> getexam() async {

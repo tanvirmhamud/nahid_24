@@ -69,7 +69,7 @@ class _QuizeListPageState extends State<QuizeListPage> {
                 SlideCountdownSeparated(
                   duration: Duration(minutes: _controller.examtime.value),
                   onDone: () async {
-                    await HttpQuize().examsubmit(
+                    await HttpExam().examsubmit(
                         quiz_subject_id: widget.quizesubjectid,
                         quiz_topics_id: widget.topicid.toString(),
                         subjectmodel: _controller.quizesubmitmodelques);
@@ -158,7 +158,7 @@ class _QuizeListPageState extends State<QuizeListPage> {
             child: Column(
               children: [
                 FutureBuilder<QuizeList?>(
-                    future: HttpQuize().getquizelist(widget.topicid),
+                    future: HttpExam().getquizelist(widget.topicid),
                     builder: ((context, snapshot) {
                       if (snapshot.hasData) {
                         questionlength = snapshot.data!.data!.length;
@@ -198,7 +198,7 @@ class _QuizeListPageState extends State<QuizeListPage> {
                 MaterialButton(
                   color: Colors.indigo,
                   onPressed: () async {
-                    await HttpQuize().examsubmit(
+                    await HttpExam().examsubmit(
                         quiz_subject_id: widget.quizesubjectid,
                         quiz_topics_id: widget.topicid.toString(),
                         subjectmodel: _controller.quizesubmitmodelques);

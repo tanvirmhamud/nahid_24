@@ -44,6 +44,9 @@ class _ForgetScreenState extends State<ForgetScreen> {
   bool showpasswordbox = false;
 
   Future otpsend() async {
+    setState(() {
+      otploading = true;
+    });
     var otpvalue = await HttpLogin().otpsend(email: email.text);
     otp.text = otpvalue['OTP'].toString();
 
@@ -96,20 +99,22 @@ class _ForgetScreenState extends State<ForgetScreen> {
                     lavel: "Email",
                   ),
                 ),
-                InkWell(
-                    onTap: () {
-                      otpsend();
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(10.r),
-                      child: Text(
-                        "Send Code",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      decoration: BoxDecoration(
-                          color: Colors.indigo,
-                          borderRadius: BorderRadius.circular(5.r)),
-                    )),
+                otploading
+                    ? CircularProgressIndicator()
+                    : InkWell(
+                        onTap: () {
+                          otpsend();
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(10.r),
+                          child: Text(
+                            "Send Code",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          decoration: BoxDecoration(
+                              color: Colors.indigo,
+                              borderRadius: BorderRadius.circular(5.r)),
+                        )),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: textfbox(

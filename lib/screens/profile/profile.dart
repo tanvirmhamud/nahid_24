@@ -100,7 +100,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          drawer: Drawer(child: CustomDrawer()),
+          // drawer: Drawer(child: CustomDrawer()),
           appBar: AppBar(
             backgroundColor: PColor.containerColor,
             elevation: 0,

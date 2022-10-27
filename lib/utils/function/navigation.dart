@@ -1,4 +1,4 @@
-import 'package:nahid_24/screens/product/books_screen.dart';
+
 import 'package:nahid_24/screens/home/home_page.dart';
 import 'package:nahid_24/language.dart';
 import 'package:nahid_24/screens/auth/login_screen.dart';
@@ -13,6 +13,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../New_Design/Allcourse/allcourse.dart';
 import '../../New_Design/Notification/notification.dart';
 import '../../New_Design/Search/searchpage.dart';
+import '../../New_Design/product/books_screen.dart';
 
 class NavigationScreen extends StatefulWidget {
   int? selectedIndex;
@@ -32,6 +33,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
     return Scaffold(
       // body: screens.elementAt(widget.selectedIndex ?? 0),
       body: PageView(
+        physics: NeverScrollableScrollPhysics(),
         controller: pageController,
         children: [
           HomeScreen(),
@@ -102,23 +104,21 @@ class _NavigationScreenState extends State<NavigationScreen> {
         // ),
 
         onTap: (int index) {
-          if(index==3){
+          if (index == 3) {
             redirectToFacebook();
-          }else
-          pageController.jumpToPage(index);
+          } else
+            pageController.jumpToPage(index);
         },
       ),
     );
   }
 
-  redirectToFacebook() async{
-
-      const url =
-          'http://m.me/nahid24publications';// or add your URL here
-      if (await canLaunchUrl(Uri.parse(url))) {
-    await launch(url);
+  redirectToFacebook() async {
+    const url = 'http://m.me/nahid24publications'; // or add your URL here
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launch(url);
     } else {
-    throw 'Could not launch $url';
+      throw 'Could not launch $url';
     }
   }
 }

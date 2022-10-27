@@ -1,8 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:nahid_24/application/app/shop/shop_provider.dart';
 import 'package:nahid_24/utils/constants/colors.dart';
 import 'package:nahid_24/utils/function/navigation_bar.dart';
 import 'package:flutter/material.dart';

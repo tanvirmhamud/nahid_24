@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:nahid_24/New_Design/Exam/quizelist.dart';
 
 import '../../Http/Quize/quize.dart';
-import '../../Model/quizesubject.dart';
+import '../../Model/examsubject.dart';
 import '../../getx/selectbtn.dart';
 import 'examtopic.dart';
 
@@ -36,7 +36,7 @@ class _QuizeSubjectPageState extends State<QuizeSubjectPage> {
         padding: EdgeInsets.all(10),
         color: Colors.grey[100],
         child: FutureBuilder<ExamSubject?>(
-          future: HttpQuize().getexam(),
+          future: HttpExam().getexam(),
           builder: ((context, snapshot) {
             if (snapshot.hasData) {
               return GridView.builder(

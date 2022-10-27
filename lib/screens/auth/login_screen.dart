@@ -1,7 +1,7 @@
-import 'package:clean_api/clean_api.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
+import 'package:nahid_24/Helper/toast.dart';
 import 'package:nahid_24/screens/auth/signup_screen.dart';
 import 'package:nahid_24/screens/home/home_page.dart';
 import 'package:nahid_24/utils/constants/assets.dart';
@@ -11,13 +11,7 @@ import 'package:nahid_24/utils/widget/custom_button.dart';
 import 'package:nahid_24/utils/widget/custom_textfield.dart';
 import 'package:nahid_24/utils/widget/submit_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../Http/Login/login.dart';
-import '../../application/auth/auth_provider.dart';
-import '../../application/auth/auth_state.dart';
-import '../../domain/app/user_profile.dart';
-import '../../domain/auth/login_body.dart';
 import '../../utils/function/navigation.dart';
 import '../../utils/widget/custom_text_button.dart';
 import 'Forget/forgor_password.dart';
@@ -80,14 +74,26 @@ class _LogInScreenState extends State<LogInScreen> {
   bool remember = false;
 
   Future login() async {
-    setState(() {
-      loading = true;
-    });
-    HttpLogin()
-        .login(context: context, number: number.text, password: password.text);
-    setState(() {
-      loading = false;
-    });
+    if (number.text.startsWith("01") && number.text.length < 11) {
+      error("Enter 11 digit number");
+    } else if (!number.text.startsWith("01") &&
+        !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+            .hasMatch(number.text)) {
+      error("Invalid email");
+    } else if (password.text.isEmpty) {
+      error("Enter password");
+    } else if (password.text.length < 6) {
+      error("Enter minimum 6 character password");
+    } else {
+      setState(() {
+        loading = true;
+      });
+      await HttpLogin().login(
+          context: context, number: number.text, password: password.text);
+      setState(() {
+        loading = false;
+      });
+    }
   }
 
   @override
@@ -106,8 +112,8 @@ class _LogInScreenState extends State<LogInScreen> {
                   child: Stack(
                     children: [
                       Positioned(
-                        right: 10,
-                        top: 10,
+                        right: 10.w,
+                        top: 10.h,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -130,9 +136,9 @@ class _LogInScreenState extends State<LogInScreen> {
                       ),
                       Container(
                         alignment: Alignment.center,
-                        margin: EdgeInsets.only(top: 10.0),
+                        margin: EdgeInsets.only(top: 10.0.h),
                         child: CircleAvatar(
-                          radius: 75,
+                          radius: 75.r,
                           backgroundColor: Colors.white,
                           backgroundImage: AssetImage(PAssets.logo),
                         ),
@@ -141,11 +147,11 @@ class _LogInScreenState extends State<LogInScreen> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(25),
+                  padding: EdgeInsets.all(25.r),
                   child: Column(
                     children: [
                       SizedBox(
-                        height: 15,
+                        height: 15.h,
                       ),
                       CustomTextField(
                           controller: number,
@@ -153,7 +159,7 @@ class _LogInScreenState extends State<LogInScreen> {
                           image: PAssets.email,
                           obscureText: false),
                       SizedBox(
-                        height: 15,
+                        height: 15.h,
                       ),
                       CustomTextField(
                           controller: password,
@@ -180,21 +186,26 @@ class _LogInScreenState extends State<LogInScreen> {
                             },
                             child: Container(
                               padding: EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 5),
+                                horizontal: 10.w,
+                                vertical: 5.h,
+                              ),
                               decoration: BoxDecoration(
                                   color: Colors.white,
-                                  borderRadius: BorderRadius.circular(5)),
+                                  borderRadius: BorderRadius.circular(5.r)),
                               child: Text(
                                 "forgot password",
                                 style: TextStyle(
-                                    fontSize: 12, color: Colors.indigo),
+                                    fontSize: 12.sp, color: Colors.indigo),
                               ),
                             ),
+                          ),
+                          SizedBox(
+                            width: 5.w,
                           ),
                         ],
                       ),
                       SizedBox(
-                        height: 15,
+                        height: 15.h,
                       ),
                       loading
                           ? Center(
@@ -202,8 +213,8 @@ class _LogInScreenState extends State<LogInScreen> {
                             )
                           : SumitButton(
                               radius: PThemes.buttonShape,
-                              width: 100,
-                              height: 30,
+                              width: 100.w,
+                              height: 30.h,
                               onTap: () {
                                 login();
                               },
@@ -231,13 +242,15 @@ class _LogInScreenState extends State<LogInScreen> {
                             child: SignInButton(
                               Buttons.Google,
                               text: "Google",
-                              onPressed: () {},
+                              onPressed: () {
+                                HttpLogin().googlelogin(context: context);
+                              },
                             ),
                           ),
                         ],
                       ),
                       SizedBox(
-                        height: 10.0,
+                        height: 10.0.h,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -248,7 +261,7 @@ class _LogInScreenState extends State<LogInScreen> {
                           ),
                           CustomButton(
                             border: Border.all(
-                              width: 0.8,
+                              width: 0.8.w,
                               color: PColor.submitButtonColorBlue,
                             ),
                             onTap: () {

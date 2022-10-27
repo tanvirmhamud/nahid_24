@@ -1,26 +1,27 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:clean_api/clean_api.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:nahid_24/application/app/shop/product%20order/product_order_provider.dart';
-import 'package:nahid_24/application/app/shop/shop_card_provider.dart';
-import 'package:nahid_24/domain/app/shop/place%20order/product_amount_model.dart';
-import 'package:nahid_24/domain/app/shop/place%20order/product_order_model.dart';
-import 'package:nahid_24/screens/order%20history/order_history.dart';
+import 'package:get/get.dart';
+import 'package:nahid_24/screens/home/shopping_cart/shopping_widgests/light_color.dart';
 import 'package:nahid_24/utils/constants/colors.dart';
-import 'package:nahid_24/utils/function/navigation_bar.dart';
 import 'package:flutter/material.dart';
-
 import '../../../Http/Delivery_Charge/delivery_charge.dart';
 import '../../../Http/Shop/orderplace.dart';
+import '../../../Model/place order/product_amount_model.dart';
+import '../../../getx/selectbtn.dart';
 import '../../Payment/payment.dart';
+import '../../order history/order_history.dart';
 import 'shopping_widgests/data.dart';
-import 'shopping_widgests/light_color.dart';
 import 'shopping_widgests/theme.dart';
 import 'shopping_widgests/title_text.dart';
 
-class ShoppingCartPage extends HookConsumerWidget {
-  ShoppingCartPage({Key? key}) : super(key: key);
+class ShoppingCartpage extends StatefulWidget {
+  const ShoppingCartpage({Key? key}) : super(key: key);
+
+  @override
+  State<ShoppingCartpage> createState() => _ShoppingCartpageState();
+}
+
+class _ShoppingCartpageState extends State<ShoppingCartpage> {
+  final _controller = Get.put(Btncontroller());
 
   double getPrice(List<ProductAmountModel> orderAmountList) {
     double price = 0;
@@ -34,8 +35,12 @@ class ShoppingCartPage extends HookConsumerWidget {
       List<ProductAmountModel>? orderProduct, BuildContext context) async {
     HttporderPlace().orderplace(orderProduct: orderProduct).then((value) {
       print(value['order_id']);
-      // Navigator.push(
-      //     context, MaterialPageRoute(builder: (context) => OrderHistory()));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => OrderHistory(
+                    orderid: value['order_id'],
+                  )));
     });
   }
 
@@ -47,46 +52,57 @@ class ShoppingCartPage extends HookConsumerWidget {
     print(deliveryamount);
   }
 
+  List<ProductAmountModel> productmodel = [];
+
   @override
-  Widget build(BuildContext context, ref) {
-    final cartItems = ref.watch(shopCartProvider).products;
-    final orderProduct = ref.watch(
-      shopCartProvider.select(
-        (value) => value.products
-            .map((e) => ProductAmountModel(id: e.id, quantity: 1))
-            .toList(),
-      ),
-    );
+  void initState() {
+    for (var i = 0; i < _controller.productmodel.length; i++) {
+      productmodel.add(
+          ProductAmountModel(id: _controller.productmodel[i].id!, quantity: 1));
+    }
+    super.initState();
+  }
 
-    useEffect(() {
-      Future.delayed(const Duration(milliseconds: 100), () async {
-        ref
-            .read(productOrderProvider(
-                    ProductOrderModel(product_info: orderProduct))
-                .notifier)
-            .init();
-      });
-      return null;
-    }, []);
-    final totalItem = useState(orderProduct.length);
-    final orderAmountList = ref
-        .watch(
-            productOrderProvider(ProductOrderModel(product_info: orderProduct)))
-        .products
-        .unlock;
+  @override
+  Widget build(BuildContext context) {
+    // final cartItems = ref.watch(shopCartProvider).products;
+    // final orderProduct = ref.watch(
+    //   shopCartProvider.select(
+    //     (value) => value.products
+    //         .map((e) => ProductAmountModel(id: e.id, quantity: 1))
+    //         .toList(),
+    //   ),
+    // );
 
-    final quantityMap = orderAmountList
-        .asMap()
-        .map((key, value) => MapEntry(value.id, value.quantity));
+    // useEffect(() {
+    //   Future.delayed(const Duration(milliseconds: 100), () async {
+    //     ref
+    //         .read(productOrderProvider(
+    //                 ProductOrderModel(product_info: orderProduct))
+    //             .notifier)
+    //         .init();
+    //   });
+    //   return null;
+    // }, []);
+    // final totalItem = useState(orderProduct.length);
+    // final orderAmountList = ref
+    //     .watch(
+    //         productOrderProvider(ProductOrderModel(product_info: orderProduct)))
+    //     .products
+    //     .unlock;
 
-    final products = ref.watch(shopCartProvider.select((value) => value.products
-        .asMap()
-        .map((key, value) => MapEntry(value.id,
-            (int.tryParse(value.price) ?? 0) * (quantityMap[value.id] ?? 1)))
-        .values
-        .toList()));
+    // final quantityMap = orderAmountList
+    //     .asMap()
+    //     .map((key, value) => MapEntry(value.id, value.quantity));
 
-    final price = products.fold<int>(0, (a, b) => (a + b));
+    // final products = ref.watch(shopCartProvider.select((value) => value.products
+    //     .asMap()
+    //     .map((key, value) => MapEntry(value.id,
+    //         (int.tryParse(value.price) ?? 0) * (quantityMap[value.id] ?? 1)))
+    //     .values
+    //     .toList()));
+
+    // final price = productmodel.fold<int>(0, (a, b) => (a + b.quantity));
 
     return Scaffold(
         backgroundColor: PColor.containerColor,
@@ -110,7 +126,7 @@ class ShoppingCartPage extends HookConsumerWidget {
                         ListView.separated(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: cartItems.length,
+                          itemCount: _controller.productmodel.length,
                           itemBuilder: (context, index) => Container(
                             height: 70,
                             child: Row(
@@ -122,7 +138,8 @@ class ShoppingCartPage extends HookConsumerWidget {
                                     borderRadius: BorderRadius.circular(7),
                                   ),
                                   child: CachedNetworkImage(
-                                    imageUrl: cartItems[index].photo,
+                                    imageUrl:
+                                        _controller.productmodel[index].photo!,
                                     fit: BoxFit.contain,
                                     errorWidget: (context, url, error) =>
                                         SizedBox.shrink(),
@@ -131,14 +148,16 @@ class ShoppingCartPage extends HookConsumerWidget {
                                 Expanded(
                                   child: ListTile(
                                     title: TitleText(
-                                      text: cartItems[index].name,
+                                      text:
+                                          _controller.productmodel[index].name!,
                                       fontSize: 15,
                                       fontWeight: FontWeight.w700,
                                     ),
                                     subtitle: Row(
                                       children: [
                                         TitleText(
-                                          text: cartItems[index].price,
+                                          text: _controller
+                                              .productmodel[index].price!,
                                           fontSize: 14,
                                         ),
                                         TitleText(
@@ -156,20 +175,20 @@ class ShoppingCartPage extends HookConsumerWidget {
                                         children: [
                                           InkWell(
                                             onTap: () {
-                                              if (orderAmountList[index]
-                                                      .quantity >
-                                                  1) {
-                                                totalItem.value =
-                                                    totalItem.value - 1;
-                                                ref
-                                                    .read(productOrderProvider(
-                                                            ProductOrderModel(
-                                                                product_info:
-                                                                    orderProduct))
-                                                        .notifier)
-                                                    .decreaseProductAmount(
-                                                        index);
-                                              }
+                                              // if (orderAmountList[index]
+                                              //         .quantity >
+                                              //     1) {
+                                              //   totalItem.value =
+                                              //       totalItem.value - 1;
+                                              //   ref
+                                              //       .read(productOrderProvider(
+                                              //               ProductOrderModel(
+                                              //                   product_info:
+                                              //                       orderProduct))
+                                              //           .notifier)
+                                              //       .decreaseProductAmount(
+                                              //           index);
+                                              // }
                                             },
                                             child: Container(
                                               width: 20,
@@ -197,23 +216,21 @@ class ShoppingCartPage extends HookConsumerWidget {
                                                 borderRadius:
                                                     BorderRadius.circular(10)),
                                             child: TitleText(
-                                              text: orderAmountList[index]
-                                                  .quantity
-                                                  .toString(),
+                                              text: "1",
                                               fontSize: 16,
                                             ),
                                           ),
                                           InkWell(
                                             onTap: () {
-                                              totalItem.value =
-                                                  totalItem.value + 1;
-                                              ref
-                                                  .read(productOrderProvider(
-                                                          ProductOrderModel(
-                                                              product_info:
-                                                                  orderProduct))
-                                                      .notifier)
-                                                  .increaseProductAmount(index);
+                                              // totalItem.value =
+                                              //     totalItem.value + 1;
+                                              // ref
+                                              //     .read(productOrderProvider(
+                                              //             ProductOrderModel(
+                                              //                 product_info:
+                                              //                     orderProduct))
+                                              //         .notifier)
+                                              //     .increaseProductAmount(index);
                                             },
                                             child: Container(
                                               width: 20,
@@ -259,57 +276,58 @@ class ShoppingCartPage extends HookConsumerWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             TitleText(
-                              // text: totalItem.value.toString() + ' Items',
-                              text: "Total",
+                              text: _controller.productmodel.length.toString() +
+                                  ' Items',
+                              // text: "Total",
                               color: Theme.of(context).hintColor,
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
                             ),
-                            TitleText(
-                              text:
-                                  '${price + int.parse(snapshot.data['data']['amount'])} Taka',
-                              fontSize: 18,
-                            ),
+                            // TitleText(
+                            //   text:
+                            //       '${price + int.parse(snapshot.data['data']['amount'])} Taka',
+                            //   fontSize: 18,
+                            // ),
                           ],
                         ),
                         SizedBox(height: 30),
                         PaymentPage(
-                            orderProduct: orderProduct,
+                            orderProduct: productmodel,
                             ammount:
-                                "${price + int.parse(snapshot.data['data']['amount'])}"),
-                        // TextButton(
-                        //   onPressed: () {
-                        //     // ref
-                        //     //     .read(productOrderProvider(
-                        //     //             ProductOrderModel(product_info: orderProduct))
-                        //     //         .notifier)
-                        //     //     .placeOrder();
+                                "${getPrice(productmodel) + int.parse(snapshot.data['data']['amount'])}"),
+                        TextButton(
+                          onPressed: () {
+                            // ref
+                            //     .read(productOrderProvider(
+                            //             ProductOrderModel(product_info: orderProduct))
+                            //         .notifier)
+                            //     .placeOrder();
 
-                        //     // vsdv
-                        //     // Navigator.of(context).pop();
-                        //     // Navigator.push(context,
-                        //     //     MaterialPageRoute(builder: (context) => OrderHistory()));
-                        //     order(orderProduct, context);
-                        //   },
-                        //   style: ButtonStyle(
-                        //     shape: MaterialStateProperty.all(
-                        //       RoundedRectangleBorder(
-                        //           borderRadius: BorderRadius.circular(15)),
-                        //     ),
-                        //     backgroundColor: MaterialStateProperty.all<Color>(
-                        //         LightColor.orange),
-                        //   ),
-                        //   child: Container(
-                        //     alignment: Alignment.center,
-                        //     padding: EdgeInsets.symmetric(vertical: 4),
-                        //     width: AppTheme.fullWidth(context) * .75,
-                        //     child: TitleText(
-                        //       text: 'Order',
-                        //       color: LightColor.background,
-                        //       fontWeight: FontWeight.w500,
-                        //     ),
-                        //   ),
-                        // ),
+                            // vsdv
+                            // Navigator.of(context).pop();
+                            // Navigator.push(context,
+                            //     MaterialPageRoute(builder: (context) => OrderHistory()));
+                            order(productmodel, context);
+                          },
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15)),
+                            ),
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                LightColor.orange),
+                          ),
+                          child: Container(
+                            alignment: Alignment.center,
+                            padding: EdgeInsets.symmetric(vertical: 4),
+                            width: AppTheme.fullWidth(context) * .75,
+                            child: TitleText(
+                              text: 'Order',
+                              color: LightColor.background,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),

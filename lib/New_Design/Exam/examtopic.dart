@@ -18,7 +18,7 @@ class _ExamTopicPageState extends State<ExamTopicPage> {
     return Material(
       child: SingleChildScrollView(
         child: FutureBuilder<ExamTopic?>(
-            future: HttpQuize().getexamtopic(widget.subjectid),
+            future: HttpExam().getexamtopic(widget.subjectid),
             builder: ((context, snapshot) {
               if (snapshot.hasData) {
                 return Container(

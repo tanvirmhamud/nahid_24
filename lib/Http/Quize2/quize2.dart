@@ -9,9 +9,19 @@ import '../../Model/quize2list.dart';
 import 'package:http/http.dart' as http;
 
 import '../../Model/quize2submit.dart';
+import '../../Model/quizesubject.dart';
 
 class HttpQuize2 {
   var box = Hive.box('user');
+
+  Future<List<Quizesubject>?> getquizelist() async {
+    var request = http.Request('GET', Uri.parse('$baseurl/api/quiz_subjects'));
+
+    http.StreamedResponse response = await request.send();
+    var responsedata = await http.Response.fromStream(response);
+
+    return quizesubjectFromJson(responsedata.body);
+  }
 
   Future<Quize2List?> getquize2list(int subjectid) async {
     var request =

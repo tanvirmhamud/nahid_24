@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import '../../Http/Delivery_Charge/delivery_charge.dart';
 import '../../Http/Payment/payment.dart';
 import '../../Http/Shop/orderplace.dart';
-import '../../domain/app/shop/place order/product_amount_model.dart';
+
+import '../../Model/place order/product_amount_model.dart';
 import '../order history/order_history.dart';
 
 class PaymentPage extends StatefulWidget {
